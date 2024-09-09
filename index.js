@@ -29,6 +29,7 @@ function checkGuess() {
   const guess = parseInt(guessInput.value, 10);
  
   attempts = attempts + 1;
+  const remainingAttempts = maxNumberOfAttempts - attempts;
 
   hideAllMessages();
 
@@ -43,14 +44,13 @@ function checkGuess() {
   }
 
   if (guess !== targetNumber) {
+    
     if (guess < targetNumber) {
       tooLowMessage.style.display = '';
     } else {
       //Bug 5: tooLowMessage => tooHighMessage
       tooHighMessage.style.display = '';
     }
-
-    const remainingAttempts = maxNumberOfAttempts - attempts;
 
     numberOfGuessesMessage.style.display = '';
     numberOfGuessesMessage.innerHTML = `You guessed ${guess}. <br> ${remainingAttempts} guesses remaining`;
@@ -59,10 +59,10 @@ function checkGuess() {
   //Bug 1: ==== to ===
   if (attempts === maxNumberOfAttempts) {
     
-    //Bug 7:  5 tries have been used
-    tooLowMessage.style.display = 'none';
-    tooHighMessage.style.display = 'none';
-
+    //Bug 7: display "You reached the max number of guesses"
+    hideAllMessages();
+    numberOfGuessesMessage.style.display = '';
+    numberOfGuessesMessage.innerHTML = `${remainingAttempts} guesses remaining`;
     maxGuessesMessage.style.display = '';
 
     submitButton.disabled = true;
@@ -97,7 +97,8 @@ function setup() {
   guessInput.disabled = false;
 
   hideAllMessages();
-  resetButton.style.display = 'none';
+  //Bug 10: Unnecessary code, already hidden by hideAllMessages()
+  //resetButton.style.display = 'none';
 }
 
 submitButton.addEventListener('click', checkGuess);
